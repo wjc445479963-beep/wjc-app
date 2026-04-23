@@ -109,6 +109,9 @@
             <div class="info-line"><span>⚡ 动爻</span><span id="dongYaoInfo"></span></div>
             <div class="info-line" style="background: #2c3e2b; color: #f7e9ce;"><span>🧧 生辰八字</span><span id="resultBazi"></span></div>
         </div>
+        <div style="text-align:center; margin: 12px 0 4px;">
+        <a id="baziDetailLink" href="bazi-detail.html" style="display:inline-block; background:#9b7b5c; color:#fff; padding:10px 24px; border-radius:40px; text-decoration:none; font-weight:bold;">📜 查看八字详解</a>
+        </div>
         <button class="reset" id="resetBtn">🔄 重新起卦 · 再卜一卦</button>
     </div>
     <div style="text-align:center; margin: 16px 0 8px;">
@@ -353,6 +356,14 @@
                 resultBaziEl.innerText = currentBazi.full;
                 resultPanel.style.display = 'block';
                 shakeBtn.disabled = true;
+                const year = document.getElementById('yearSelect').value;
+                const month = document.getElementById('monthSelect').value;
+                const day = document.getElementById('daySelect').value;
+                const hour = document.getElementById('hourSelect').value;
+                const link = document.getElementById('baziDetailLink');
+                if (link) {
+                    link.href = `bazi-detail.html?y=${year}&m=${month}&d=${day}&h=${hour}`;
+                }
             } else {
                 resultPanel.style.display = 'none';
                 shakeBtn.disabled = false;
