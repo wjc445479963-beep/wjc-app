@@ -199,6 +199,7 @@
         const DI_ZHI = ["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
         const GAN_WUXING = ["木","木","火","火","土","土","金","金","水","水"];
         const ZHI_WUXING = ["水","土","木","木","土","火","火","土","金","金","土","水"];
+
         // 日干与天干十神关系
         function getShiShen(riGan, otherGan) {
             const riIdx = TIAN_GAN.indexOf(riGan);
@@ -220,7 +221,7 @@
             return map[diff];
         }
 
-        // 初始化选择器 (与占卜页相同)
+        // 初始化选择器
         function initSelects() {
             const ySel = document.getElementById('yearSelect');
             const mSel = document.getElementById('monthSelect');
@@ -231,19 +232,28 @@
                 const o = document.createElement('option'); o.value=y; o.textContent=y+'年';
                 if (y===2000) o.selected=true; ySel.appendChild(o);
             }
-            for (let m=1; m<=12; m++) { const o=document.createElement('option'); o.value=m; o.textContent=m+'月'; mSel.appendChild(o); }
+            for (let m=1; m<=12; m++) {
+                const o = document.createElement('option'); o.value=m; o.textContent=m+'月'; mSel.appendChild(o);
+            }
             function updDays(){
                 const y=parseInt(ySel.value), m=parseInt(mSel.value);
                 const days=new Date(y,m,0).getDate(); dSel.innerHTML='';
-                for (let d=1;d<=days;d++){ const o=document.createElement('option'); o.value=d; o.textContent=d+'日'; dSel.appendChild(o); }
+                for (let d=1;d<=days;d++){
+                    const o=document.createElement('option'); o.value=d; o.textContent=d+'日'; dSel.appendChild(o);
+                }
             }
-            ySel.addEventListener('change',updDays); mSel.addEventListener('change',updDays); updDays();
+            ySel.addEventListener('change',updDays);
+            mSel.addEventListener('change',updDays);
+            updDays();
             const hourNames=['子时','丑时','寅时','卯时','辰时','巳时','午时','未时','申时','酉时','戌时','亥时'];
-            hourNames.forEach((n,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=n; hSel.appendChild(o); });
+            hourNames.forEach((n,i)=>{
+                const o=document.createElement('option'); o.value=i; o.textContent=n; hSel.appendChild(o);
+            });
             hSel.value=6;
         }
         initSelects();
 
+        // 核心分析函数
         function analyze() {
             try {
                 const y = parseInt(document.getElementById('yearSelect').value);
@@ -272,7 +282,7 @@
                 });
                 document.getElementById('pillarRow').innerHTML = html;
 
-                // 五行统计（天干+地支）
+                // 五行统计
                 const wuxingCount = {金:0,木:0,水:0,火:0,土:0};
                 const allGan = [yearGan, monthGan, dayGan, timeGan];
                 const allZhi = [yearZhi, monthZhi, dayZhi, timeZhi];
@@ -284,14 +294,13 @@
                 }
                 document.getElementById('wuxingBox').innerHTML = wuxingHtml;
 
-                // 简单评语（基于日干五行旺衰）
+                // 简单评语
                 const riWuxing = GAN_WUXING[TIAN_GAN.indexOf(dayGan)];
                 const countSelf = wuxingCount[riWuxing];
                 let comment = '';
                 if (countSelf >= 3) comment = `日主${riWuxing}旺，宜克泄耗，喜财官食伤。`;
                 else if (countSelf === 0) comment = `日主${riWuxing}极弱，宜生扶，喜印比相助。`;
                 else comment = `日主${riWuxing}中和，五行流通尚可。`;
-                // 补充五行缺项提示
                 const missing = [];
                 for (let w in wuxingCount) if (wuxingCount[w]===0) missing.push(w);
                 if (missing.length>0) comment += ` 八字缺${missing.join('、')}，可在此方面补益。`;
@@ -304,6 +313,55 @@
             }
         }
 
+        // ------ 自动填充URL参数（从主页跳转） ------
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                y: params.get('y'),
+                m: params.get('m'),
+                d: params.get('d'),
+                h: params.get('h')
+            };
+        }
+
+        function fillAndAnalyzeFromParams() {
+            const p = getQueryParams();
+            // 只要有年份就尝试填充，其余可默认
+            if (!p.y) return; // 无参数，不做任何操作，保持手动模式
+
+            const yearSelect = document.getElementById('yearSelect');
+            const monthSelect = document.getElementById('monthSelect');
+            const daySelect = document.getElementById('daySelect');
+            const hourSelect = document.getElementById('hourSelect');
+
+            // 设置年份
+            yearSelect.value = p.y;
+            // 设置月份，默认1月
+            monthSelect.value = p.m || '1';
+            // 触发日期更新
+            const y = parseInt(yearSelect.value);
+            const m = parseInt(monthSelect.value);
+            const days = new Date(y, m, 0).getDate();
+            daySelect.innerHTML = '';
+            for (let d=1; d<=days; d++) {
+                const option = document.createElement('option');
+                option.value = d;
+                option.textContent = d + '日';
+                daySelect.appendChild(option);
+            }
+            daySelect.value = p.d || '1';
+            hourSelect.value = (p.h !== null) ? p.h : '6';
+
+            // 自动分析
+            analyze();
+        }
+
+        // 页面加载完成后自动填充（如果带有参数）
+        window.addEventListener('DOMContentLoaded', () => {
+            fillAndAnalyzeFromParams();
+        });
+
+        // 手动点击按钮分析
         document.getElementById('analyzeBtn').addEventListener('click', analyze);
     })();
 </script>
