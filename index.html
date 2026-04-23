@@ -32,8 +32,8 @@
         /* 生辰八字面板 */
         .bazi-section { margin-bottom: 16px; }
         .bazi-toggle { background: #e8dfd1; border-radius: 40px; padding: 10px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-weight: 500; color: #4a3624; border: 1px solid #d6c4ae; }
-        .bazi-panel { background: #f8f1e7; border-radius: 24px; padding: 16px; margin-top: 12px; border: 1px solid #d6c4ae; display: none; }
-        .bazi-panel.show { display: block; }
+        .bazi-panel { background: #f8f1e7; border-radius: 24px; padding: 16px; margin-top: 12px; border: 1px solid #d6c4ae; /* 默认显示，移除 display: none */ }
+        .bazi-panel.hidden { display: none; } /* 点击 toggle 后添加 .hidden 来隐藏 */
         .picker-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
         .picker-row label { width: 60px; font-weight: bold; color: #5a3e28; align-self: center; }
         .picker-row select { flex: 1; padding: 10px; border-radius: 30px; border: 1px solid #cbb295; background: white; font-size: 1rem; font-family: inherit; }
@@ -73,10 +73,10 @@
         </div>
     </div>
 
-    <!-- 生辰八字模块 -->
+    <!-- 生辰八字模块（默认展开） -->
     <div class="bazi-section">
         <div class="bazi-toggle" id="baziToggle">
-            <span>📅 设定生辰八字</span>
+            <span>📅 设定生辰八字 (点击收起/展开)</span>
             <span id="baziPreview">（未设置）</span>
         </div>
         <div class="bazi-panel" id="baziPanel">
@@ -119,7 +119,7 @@
     (function(){
         "use strict";
 
-        // ---------- 八字计算 (使用 lunar-javascript) ----------
+        // ---------- 八字计算 ----------
         let currentBazi = { year: '', month: '', day: '', hour: '', full: '未设置' };
         
         function initDateSelects() {
@@ -209,15 +209,16 @@
             }
         }
 
+        // 切换面板（使用 .hidden 类代替 .show）
         const toggleBtn = document.getElementById('baziToggle');
         const panel = document.getElementById('baziPanel');
         toggleBtn.addEventListener('click', () => {
-            panel.classList.toggle('show');
+            panel.classList.toggle('hidden');
         });
 
         document.getElementById('applyBazi').addEventListener('click', () => {
             updateBaziDisplay();
-            panel.classList.remove('show');
+            panel.classList.add('hidden'); // 点击应用后自动收起面板（可选）
         });
 
         setTimeout(() => {
@@ -384,7 +385,7 @@
     })();
 </script>
 
-<!-- 🔔 Service Worker 注册（已帮您加在这里） -->
+<!-- Service Worker 注册 -->
 <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
