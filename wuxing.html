@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>五行穿衣指南</title>
+    <!-- 农历库 -->
+    <script src="https://unpkg.com/lunar-javascript@1.6.13/lunar.js"></script>
+    <style>
+        * { box-sizing: border-box; user-select: none; }
+        body {
+            background: #f5f0e7;
+            font-family: 'Segoe UI', 'Noto Sans CJK SC', Roboto, sans-serif;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: #fffaf2;
+            border-radius: 48px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            padding: 28px 20px 32px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2rem;
+            margin: 0 0 6px;
+            color: #3e2a1f;
+            font-weight: 500;
+            letter-spacing: 2px;
+        }
+        .sub {
+            color: #8b7355;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #ede3d4;
+            padding-bottom: 14px;
+            margin-bottom: 24px;
+        }
+        .date-display {
+            background: #f8f1e7;
+            border-radius: 40px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #4a3624;
+            letter-spacing: 1px;
+        }
+        .wuxing-badge {
+            display: inline-block;
+            background: #2c3e2b;
+            color: #f7e9ce;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            margin: 8px 0 18px;
+        }
+        .color-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .color-card {
+            width: 80px;
+            text-align: center;
+        }
+        .color-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 3px solid #fff;
+        }
+        .color-label {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #4a3624;
+        }
+        .advice-box {
+            background: #f1e9de;
+            border-radius: 28px;
+            padding: 18px;
+            margin-top: 20px;
+            text-align: left;
+            border-top: 3px solid #dbbd96;
+        }
+        .advice-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2b4f3a;
+        }
+        .back-link {
+            display: block;
+            margin-top: 24px;
+            color: #9b7b5c;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        footer {
+            font-size: 0.7rem;
+            margin-top: 16px;
+            color: #b49b7c;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>👗 五行穿衣指南</h1>
+    <div class="sub">今日五行 · 顺色而行</div>
+
+    <div class="date-display" id="dateDisplay">加载中...</div>
+    <div class="wuxing-badge" id="wuxingBadge">--</div>
+
+    <div class="color-row" id="colorRow"></div>
+
+    <div class="advice-box" id="adviceBox">
+        <div class="advice-title">📖 穿搭建议</div>
+        <div id="adviceText">请稍候...</div>
+    </div>
+
+    <a href="javascript:history.back()" class="back-link">← 返回上一页</a>
+    <footer>五行穿衣 · 每日更新</footer>
+</div>
+
+<script>
+    (function() {
+        // 天干五行映射
+        const ganWuXing = {
+            '甲': '木', '乙': '木',
+            '丙': '火', '丁': '火',
+            '戊': '土', '己': '土',
+            '庚': '金', '辛': '金',
+            '壬': '水', '癸': '水'
+        };
+
+        // 五行对应颜色
+        const wuxingColors = {
+            '木': { main: '#4caf50', name: '绿色', desc: '木主生发，充满活力。' },
+            '火': { main: '#f44336', name: '红色', desc: '火主热情，能量满满。' },
+            '土': { main: '#ff9800', name: '棕色/黄色', desc: '土主敦厚，稳重大方。' },
+            '金': { main: '#9e9e9e', name: '白色/金色', desc: '金主果断，清爽利落。' },
+            '水': { main: '#2196f3', name: '黑色/蓝色', desc: '水主智慧，沉静优雅。' }
+        };
+
+        // 五行相生：生我者为吉，我生者为次吉，克我者为忌
+        const shengRelation = {
+            '木': { sheng: '水', beiSheng: '火', ke: '金' },
+            '火': { sheng: '木', beiSheng: '土', ke: '水' },
+            '土': { sheng: '火', beiSheng: '金', ke: '木' },
+            '金': { sheng: '土', beiSheng: '水', ke: '火' },
+            '水': { sheng: '金', beiSheng: '木', ke: '土' }
+        };
+
+        function getTodayWuXing() {
+            const today = new Date();
+            // 使用 lunar-javascript 获取今日日柱
+            const lunar = window.Lunar.fromDate(today);
+            const dayGanZhi = lunar.getDayInGanZhi(); // 返回如 "甲子"
+            const tianGan = dayGanZhi.charAt(0);      // 天干
+            const wuxing = ganWuXing[tianGan] || '未知';
+            return {
+                ganZhi: dayGanZhi,
+                tianGan: tianGan,
+                wuxing: wuxing,
+                dateStr: `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日`
+            };
+        }
+
+        function render() {
+            try {
+                const data = getTodayWuXing();
+                document.getElementById('dateDisplay').innerText = 
+                    `📅 ${data.dateStr} · ${data.ganZhi}日`;
+                document.getElementById('wuxingBadge').innerText = 
+                    `今日五行：${data.wuxing} (天干${data.tianGan})`;
+
+                // 颜色展示：主色、生我色、我生色
+                const mainColor = wuxingColors[data.wuxing] || wuxingColors['木'];
+                const shengColorKey = shengRelation[data.wuxing]?.sheng || '水';
+                const beiShengColorKey = shengRelation[data.wuxing]?.beiSheng || '火';
+                const keColorKey = shengRelation[data.wuxing]?.ke || '金';
+
+                const shengColor = wuxingColors[shengColorKey];
+                const beiShengColor = wuxingColors[beiShengColorKey];
+                const keColor = wuxingColors[keColorKey];
+
+                const colorRow = document.getElementById('colorRow');
+                colorRow.innerHTML = `
+                    <div class="color-card">
+                        <div class="color-circle" style="background:${shengColor.main};"></div>
+                        <div class="color-label">吉色</div>
+                        <div style="font-size:0.7rem;">${shengColor.name}</div>
+                    </div>
+                    <div class="color-card">
+                        <div class="color-circle" style="background:${mainColor.main};"></div>
+                        <div class="color-label">次吉</div>
+                        <div style="font-size:0.7rem;">${mainColor.name}</div>
+                    </div>
+                    <div class="color-card">
+                        <div class="color-circle" style="background:${keColor.main}; opacity:0.6;"></div>
+                        <div class="color-label">不宜</div>
+                        <div style="font-size:0.7rem;">${keColor.name}</div>
+                    </div>
+                `;
+
+                // 穿搭建议文字
+                const advice = `
+                    <p>✨ <strong>大吉（生我）</strong>：${shengColor.name}系，${shengRelation[data.wuxing]?.sheng || ''}生${data.wuxing}，气场流通，万事顺遂。</p>
+                    <p>🟡 <strong>次吉（同我）</strong>：${mainColor.name}系，五行相同，平稳和谐，适合日常。</p>
+                    <p>⚠️ <strong>不宜（克我）</strong>：${keColor.name}系，${data.wuxing}被${shengRelation[data.wuxing]?.ke || ''}克，能量受制，今日尽量避开。</p>
+                `;
+                document.getElementById('adviceText').innerHTML = advice;
+            } catch (e) {
+                document.getElementById('dateDisplay').innerText = '⚠️ 日历库加载异常';
+                document.getElementById('wuxingBadge').innerText = '请刷新重试';
+                document.getElementById('colorRow').innerHTML = '';
+                document.getElementById('adviceText').innerText = '无法计算今日五行，请检查网络连接后刷新页面。';
+                console.error(e);
+            }
+        }
+
+        // 页面加载后执行
+        if (window.Lunar) {
+            render();
+        } else {
+            // 库未就绪，等待一下
+            window.addEventListener('load', render);
+        }
+    })();
+</script>
+</body>
+</html>
