@@ -1,0 +1,11 @@
+{
+  "name": "王大师的三枚铜钱",
+  "short_name": "三枚铜钱",
+  "description": "仿古三枚铜钱占卜 · 易经六十四卦",
+  "start_url": "/wjc-app/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f0e7",
+  "theme_color": "#9b7b5c",
+  
+}
