@@ -76,8 +76,7 @@
     <!-- 生辰八字模块（默认展开） -->
     <div class="bazi-section">
         <div class="bazi-toggle" id="baziToggle">
-            <span>📅 设定生辰八字 (点击收起/展开)</span>
-            <span id="baziPreview">（未设置）</span>
+            <span>📅 设定生辰八字</span>
         </div>
         <div class="bazi-panel" id="baziPanel">
             <div class="picker-row">
@@ -97,8 +96,8 @@
                 <select id="hourSelect"></select>
             </div>
             <button class="btn-bazi-apply" id="applyBazi">✨ 应用此八字</button>
-            <div class="bazi-display" id="baziDisplay">请选择出生时间</div>
         </div>
+        <div class="bazi-display" id="baziDisplay">请选择出生时间</div>
     </div>
 
     <div id="resultPanel" style="display: none;">
@@ -202,7 +201,6 @@
                 const bazi = computeBazi();
                 currentBazi = bazi;
                 document.getElementById('baziDisplay').innerText = `八字：${bazi.full}`;
-                document.getElementById('baziPreview').innerHTML = `（${bazi.year} ${bazi.month}）`;
                 if (step === 6) {
                     document.getElementById('resultBazi').innerText = bazi.full;
                 }
