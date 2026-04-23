@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>八字详解</title>
+    <script src="https://unpkg.com/lunar-javascript@1.6.13/lunar.js"></script>
+    <style>
+        * { box-sizing: border-box; user-select: none; }
+        body {
+            background: #f5f0e7;
+            font-family: 'Segoe UI', 'Noto Sans CJK SC', Roboto, sans-serif;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 550px;
+            width: 100%;
+            background: #fffaf2;
+            border-radius: 48px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            padding: 28px 20px 28px;
+        }
+        h1 {
+            font-size: 2rem;
+            margin: 0 0 6px;
+            text-align: center;
+            color: #3e2a1f;
+            letter-spacing: 2px;
+        }
+        .sub {
+            text-align: center;
+            color: #8b7355;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #ede3d4;
+            padding-bottom: 14px;
+            margin-bottom: 24px;
+        }
+        .bazi-panel {
+            background: #f8f1e7;
+            border-radius: 24px;
+            padding: 16px;
+            margin: 16px 0;
+            border: 1px solid #d6c4ae;
+        }
+        .picker-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .picker-row label {
+            width: 60px;
+            font-weight: bold;
+            color: #5a3e28;
+            align-self: center;
+        }
+        .picker-row select {
+            flex: 1;
+            padding: 10px;
+            border-radius: 30px;
+            border: 1px solid #cbb295;
+            background: white;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        .btn {
+            background: #9b7b5c;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            width: 100%;
+            margin: 12px 0;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+        }
+        .result-card {
+            background: #f1e9de;
+            border-radius: 28px;
+            padding: 20px 16px;
+            margin-top: 16px;
+            border-top: 3px solid #dbbd96;
+        }
+        .pillar-row {
+            display: flex;
+            justify-content: space-around;
+            margin: 12px 0;
+        }
+        .pillar {
+            text-align: center;
+            background: white;
+            border-radius: 20px;
+            padding: 12px 6px;
+            min-width: 70px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .pillar .ganzhi {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #3e2a1f;
+            letter-spacing: 2px;
+        }
+        .pillar .shishen {
+            font-size: 0.8rem;
+            color: #9b7b5c;
+        }
+        .wuxing-box {
+            display: flex;
+            justify-content: space-around;
+            margin: 16px 0;
+        }
+        .wuxing-item {
+            text-align: center;
+            flex: 1;
+        }
+        .wuxing-count {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #3e2a1f;
+        }
+        .comment {
+            background: white;
+            border-radius: 20px;
+            padding: 14px;
+            margin-top: 12px;
+            color: #4a3624;
+            line-height: 1.6;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #9b7b5c;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            color: #b49b7c;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📜 八字详解</h1>
+    <div class="sub">输入生辰 · 查看命理</div>
+
+    <div class="bazi-panel">
+        <div class="picker-row">
+            <label>年份</label>
+            <select id="yearSelect"></select>
+        </div>
+        <div class="picker-row">
+            <label>月份</label>
+            <select id="monthSelect"></select>
+        </div>
+        <div class="picker-row">
+            <label>日期</label>
+            <select id="daySelect"></select>
+        </div>
+        <div class="picker-row">
+            <label>时辰</label>
+            <select id="hourSelect"></select>
+        </div>
+        <button class="btn" id="analyzeBtn">🔍 查看八字详解</button>
+    </div>
+
+    <div id="resultArea" style="display: none;">
+        <div class="result-card">
+            <div style="text-align:center; font-weight:bold; margin-bottom:10px;">四柱十神</div>
+            <div class="pillar-row" id="pillarRow"></div>
+
+            <div style="text-align:center; font-weight:bold; margin:16px 0 10px;">五行分布</div>
+            <div class="wuxing-box" id="wuxingBox"></div>
+
+            <div style="font-weight:bold; margin-bottom:6px;">📝 简评</div>
+            <div class="comment" id="commentText"></div>
+        </div>
+    </div>
+
+    <a href="javascript:history.back()" class="back-link">← 返回上一页</a>
+    <footer>八字详解 · 供娱乐参考</footer>
+</div>
+
+<script>
+    (function() {
+        // 天干、地支、五行、十神映射
+        const TIAN_GAN = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
+        const DI_ZHI = ["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
+        const GAN_WUXING = ["木","木","火","火","土","土","金","金","水","水"];
+        const ZHI_WUXING = ["水","土","木","木","土","火","火","土","金","金","土","水"];
+        // 日干与天干十神关系
+        function getShiShen(riGan, otherGan) {
+            const riIdx = TIAN_GAN.indexOf(riGan);
+            const oIdx = TIAN_GAN.indexOf(otherGan);
+            const diff = (oIdx - riIdx + 10) % 10;
+            const sameYinYang = (riIdx % 2 === oIdx % 2);
+            const map = {
+                0: sameYinYang ? '比肩' : '劫财',
+                1: sameYinYang ? '劫财' : '比肩',
+                2: sameYinYang ? '食神' : '伤官',
+                3: sameYinYang ? '伤官' : '食神',
+                4: sameYinYang ? '偏财' : '正财',
+                5: sameYinYang ? '正财' : '偏财',
+                6: sameYinYang ? '七杀' : '正官',
+                7: sameYinYang ? '正官' : '七杀',
+                8: sameYinYang ? '偏印' : '正印',
+                9: sameYinYang ? '正印' : '偏印'
+            };
+            return map[diff];
+        }
+
+        // 初始化选择器 (与占卜页相同)
+        function initSelects() {
+            const ySel = document.getElementById('yearSelect');
+            const mSel = document.getElementById('monthSelect');
+            const dSel = document.getElementById('daySelect');
+            const hSel = document.getElementById('hourSelect');
+            const cy = new Date().getFullYear();
+            for (let y=1900; y<=cy+1; y++) {
+                const o = document.createElement('option'); o.value=y; o.textContent=y+'年';
+                if (y===2000) o.selected=true; ySel.appendChild(o);
+            }
+            for (let m=1; m<=12; m++) { const o=document.createElement('option'); o.value=m; o.textContent=m+'月'; mSel.appendChild(o); }
+            function updDays(){
+                const y=parseInt(ySel.value), m=parseInt(mSel.value);
+                const days=new Date(y,m,0).getDate(); dSel.innerHTML='';
+                for (let d=1;d<=days;d++){ const o=document.createElement('option'); o.value=d; o.textContent=d+'日'; dSel.appendChild(o); }
+            }
+            ySel.addEventListener('change',updDays); mSel.addEventListener('change',updDays); updDays();
+            const hourNames=['子时','丑时','寅时','卯时','辰时','巳时','午时','未时','申时','酉时','戌时','亥时'];
+            hourNames.forEach((n,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=n; hSel.appendChild(o); });
+            hSel.value=6;
+        }
+        initSelects();
+
+        function analyze() {
+            try {
+                const y = parseInt(document.getElementById('yearSelect').value);
+                const m = parseInt(document.getElementById('monthSelect').value);
+                const d = parseInt(document.getElementById('daySelect').value);
+                const hIdx = parseInt(document.getElementById('hourSelect').value);
+                const date = new Date(y, m-1, d, (hIdx*2)%24, 0, 0);
+                const lunar = window.Lunar.fromDate(date);
+                const ec = lunar.getEightChar();
+                const yearGan = ec.getYearGan(), yearZhi = ec.getYearZhi();
+                const monthGan = ec.getMonthGan(), monthZhi = ec.getMonthZhi();
+                const dayGan = ec.getDayGan(), dayZhi = ec.getDayZhi();
+                const timeGan = ec.getTimeGan(), timeZhi = ec.getTimeZhi();
+
+                // 四柱十神
+                const pillars = [
+                    {gan:yearGan, zhi:yearZhi, name:'年柱'},
+                    {gan:monthGan, zhi:monthZhi, name:'月柱'},
+                    {gan:dayGan, zhi:dayZhi, name:'日柱'},
+                    {gan:timeGan, zhi:timeZhi, name:'时柱'}
+                ];
+                let html = '';
+                pillars.forEach(p => {
+                    const shiShen = getShiShen(dayGan, p.gan);
+                    html += `<div class="pillar"><div class="ganzhi">${p.gan}${p.zhi}</div><div class="shishen">${shiShen}</div><div style="font-size:0.7rem;">${p.name}</div></div>`;
+                });
+                document.getElementById('pillarRow').innerHTML = html;
+
+                // 五行统计（天干+地支）
+                const wuxingCount = {金:0,木:0,水:0,火:0,土:0};
+                const allGan = [yearGan, monthGan, dayGan, timeGan];
+                const allZhi = [yearZhi, monthZhi, dayZhi, timeZhi];
+                allGan.forEach(g => wuxingCount[GAN_WUXING[TIAN_GAN.indexOf(g)]]++);
+                allZhi.forEach(z => wuxingCount[ZHI_WUXING[DI_ZHI.indexOf(z)]]++);
+                let wuxingHtml = '';
+                for (let w in wuxingCount) {
+                    wuxingHtml += `<div class="wuxing-item"><div class="wuxing-count">${wuxingCount[w]}</div><div style="font-size:0.8rem;">${w}</div></div>`;
+                }
+                document.getElementById('wuxingBox').innerHTML = wuxingHtml;
+
+                // 简单评语（基于日干五行旺衰）
+                const riWuxing = GAN_WUXING[TIAN_GAN.indexOf(dayGan)];
+                const countSelf = wuxingCount[riWuxing];
+                let comment = '';
+                if (countSelf >= 3) comment = `日主${riWuxing}旺，宜克泄耗，喜财官食伤。`;
+                else if (countSelf === 0) comment = `日主${riWuxing}极弱，宜生扶，喜印比相助。`;
+                else comment = `日主${riWuxing}中和，五行流通尚可。`;
+                // 补充五行缺项提示
+                const missing = [];
+                for (let w in wuxingCount) if (wuxingCount[w]===0) missing.push(w);
+                if (missing.length>0) comment += ` 八字缺${missing.join('、')}，可在此方面补益。`;
+                document.getElementById('commentText').innerText = comment;
+
+                document.getElementById('resultArea').style.display = 'block';
+            } catch (e) {
+                alert('八字分析异常，请重试');
+                console.error(e);
+            }
+        }
+
+        document.getElementById('analyzeBtn').addEventListener('click', analyze);
+    })();
+</script>
+</body>
+</html>
