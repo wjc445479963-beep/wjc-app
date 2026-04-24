@@ -369,7 +369,7 @@
                 if (askBtn) {
                     const guaInfo = `${analysis.benGua}，动爻${analysis.dongText}。请帮我解读这个卦象的含义、吉凶和注意事项。`;
                     askBtn.onclick = () => {
-                        window.open(`https://chat.deepseek.com/?q=${encodeURIComponent(guaInfo)}`, '_blank');
+                        window.open(`https://chat.deepseek.com/?q=${encodeURIComponent(guaInfo)}`, '_blank', 'noopener,noreferrer');
                     };
                 }
             } else {
