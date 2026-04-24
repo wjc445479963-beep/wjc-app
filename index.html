@@ -42,7 +42,7 @@
 
         .result-card { background: #f1e9de; border-radius: 28px; padding: 20px 16px; margin-top: 16px; border-top: 3px solid #dbbd96; }
         .gua-name { font-size: 2.6rem; font-weight: bold; text-align: center; margin: 8px 0 16px; color: #2b4f3a; letter-spacing: 4px; }
-        .info-line { display: flex; justify-content: space-between; background: white; padding: 10px 18px; border-radius: 40px; margin: 8px 0; font-size: 1rem; }
+        .info-line { display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px 18px; border-radius: 40px; margin: 8px 0; font-size: 1rem; }
         button.reset { background: #cdb59b; border: none; padding: 12px 20px; border-radius: 40px; font-size: 1.1rem; width: 100%; margin-top: 20px; font-weight: bold; cursor: pointer; transition: 0.1s; color: #2d241a; }
         footer { font-size: 0.7rem; text-align: center; color: #b49b7c; margin-top: 20px; }
         .badge { background: #3e2a1f; color: #f9e5c1; border-radius: 40px; padding: 4px 12px; font-size: 0.7rem; display: inline-block; }
@@ -96,8 +96,9 @@
                 <select id="hourSelect"></select>
             </div>
             <button class="btn-bazi-apply" id="applyBazi">✨ 应用此八字</button>
+            <div class="bazi-display" id="baziDisplay">请选择出生时间</div>
         </div>
-        <div class="bazi-display" id="baziDisplay">请选择出生时间</div>
+        
     </div>
 
     <div id="resultPanel" style="display: none;">
@@ -223,7 +224,7 @@
 
         document.getElementById('applyBazi').addEventListener('click', () => {
             updateBaziDisplay();
-            panel.classList.add('hidden'); // 点击应用后自动收起面板（可选）
+            
         });
 
         setTimeout(() => {
