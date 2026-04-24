@@ -110,7 +110,8 @@
             <div class="info-line" style="background: #2c3e2b; color: #f7e9ce;"><span>🧧 生辰八字</span><span id="resultBazi"></span></div>
         </div>
         <div style="text-align:center; margin: 12px 0 4px;">
-        <a id="baziDetailLink" href="bazi.html" style="display:inline-block; background:#9b7b5c; color:#fff; padding:10px 24px; border-radius:40px; text-decoration:none; font-weight:bold;">📜 查看八字详解</a>
+            <a id="baziDetailLink" href="bazi.html" style="display:inline-block; background:#9b7b5c; color:#fff; padding:10px 24px; border-radius:40px; text-decoration:none; font-weight:bold;">📜 查看八字详解</a>
+            <button id="askAI" style="display:inline-block; background:#2c3e2b; color:#f7e9ce; padding:10px 24px; border-radius:40px; border:none; font-weight:bold; cursor:pointer; margin:8px;">🤖 让 DeepSeek 解卦</button>
         </div>
         <button class="reset" id="resetBtn">🔄 重新起卦 · 再卜一卦</button>
     </div>
@@ -363,6 +364,13 @@
                 const link = document.getElementById('baziDetailLink');
                 if (link) {
                     link.href = `bazi.html?y=${year}&m=${month}&d=${day}&h=${hour}`;
+                }
+                const askBtn = document.getElementById('askAI');
+                if (askBtn) {
+                    const guaInfo = `${analysis.benGua}，动爻${analysis.dongText}。请帮我解读这个卦象的含义、吉凶和注意事项。`;
+                    askBtn.onclick = () => {
+                        window.open(`https://chat.deepseek.com/?q=${encodeURIComponent(guaInfo)}`, '_blank');
+                    };
                 }
             } else {
                 resultPanel.style.display = 'none';
