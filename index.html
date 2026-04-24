@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>王大师的三枚铜钱</title>
-    <!-- PWA 支持 -->
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <!-- 农历/八字计算库 -->
     <script src="https://unpkg.com/lunar-javascript@1.6.13/lunar.js"></script>
     <style>
         * { box-sizing: border-box; user-select: none; }
@@ -29,11 +27,10 @@
         .yao-symbol { font-size: 1.8rem; line-height: 1; letter-spacing: 6px; font-family: 'Segoe UI', 'Noto Sans CJK SC', monospace; }
         .yao-type { font-size: 0.8rem; background: #efe2d0; padding: 4px 12px; border-radius: 40px; color: #4a3624; }
 
-        /* 生辰八字面板 */
         .bazi-section { margin-bottom: 16px; }
         .bazi-toggle { background: #e8dfd1; border-radius: 40px; padding: 10px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-weight: 500; color: #4a3624; border: 1px solid #d6c4ae; }
-        .bazi-panel { background: #f8f1e7; border-radius: 24px; padding: 16px; margin-top: 12px; border: 1px solid #d6c4ae; /* 默认显示，移除 display: none */ }
-        .bazi-panel.hidden { display: none; } /* 点击 toggle 后添加 .hidden 来隐藏 */
+        .bazi-panel { background: #f8f1e7; border-radius: 24px; padding: 16px; margin-top: 12px; border: 1px solid #d6c4ae; }
+        .bazi-panel.hidden { display: none; }
         .picker-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
         .picker-row label { width: 60px; font-weight: bold; color: #5a3e28; align-self: center; }
         .picker-row select { flex: 1; padding: 10px; border-radius: 30px; border: 1px solid #cbb295; background: white; font-size: 1rem; font-family: inherit; }
@@ -73,7 +70,6 @@
         </div>
     </div>
 
-    <!-- 生辰八字模块（默认展开） -->
     <div class="bazi-section">
         <div class="bazi-toggle" id="baziToggle">
             <span>📅 设定生辰八字</span>
@@ -99,7 +95,6 @@
             <p style="font-size:0.7rem; color:#8b7355; text-align:center; margin:4px 0 8px;">👆 八字为选填，若不填则结果中不显示</p>
             <div class="bazi-display" id="baziDisplay">请选择出生时间</div>
         </div>
-        
     </div>
 
     <div id="resultPanel" style="display: none;">
@@ -202,6 +197,17 @@
             };
         }
 
+        // 仅更新面板预览，不改变 currentBazi
+        function refreshBaziPreview() {
+            try {
+                const bazi = computeBazi();
+                document.getElementById('baziDisplay').innerText = `八字：${bazi.full}`;
+            } catch (e) {
+                document.getElementById('baziDisplay').innerText = '八字计算失败';
+            }
+        }
+
+        // 正式应用八字（更新 currentBazi 并控制结果行显示）
         function updateBaziDisplay() {
             try {
                 const bazi = computeBazi();
@@ -210,10 +216,10 @@
                 if (step === 6) {
                     const baziLine = document.getElementById('baziInfoLine');
                     if (bazi.full !== '未设置') {
-                    baziLine.style.display = 'flex';
-                    document.getElementById('resultBazi').innerText = bazi.full;
+                        baziLine.style.display = 'flex';
+                        document.getElementById('resultBazi').innerText = bazi.full;
                     } else {
-                    baziLine.style.display = 'none';
+                        baziLine.style.display = 'none';
                     }
                 }
             } catch (e) {
@@ -222,21 +228,20 @@
             }
         }
 
-        // 切换面板（使用 .hidden 类代替 .show）
+        // 切换面板
         const toggleBtn = document.getElementById('baziToggle');
         const panel = document.getElementById('baziPanel');
         toggleBtn.addEventListener('click', () => {
             panel.classList.toggle('hidden');
         });
 
+        // 点击“应用此八字”时才正式应用
         document.getElementById('applyBazi').addEventListener('click', () => {
             updateBaziDisplay();
-            
         });
 
-        setTimeout(() => {
-            updateBaziDisplay();
-        }, 200);
+        // 初始预览（不应用）
+        refreshBaziPreview();
 
         // ---------- 八卦基础 ----------
         const GUA_8_NAMES = ["坤", "艮", "坎", "巽", "震", "离", "兑", "乾"];
@@ -364,10 +369,10 @@
                 dongYaoInfoEl.innerText = analysis.dongText;
                 const baziLine = document.getElementById('baziInfoLine');
                 if (currentBazi.full !== '未设置') {
-                baziLine.style.display = 'flex';
-                resultBaziEl.innerText = currentBazi.full;
+                    baziLine.style.display = 'flex';
+                    resultBaziEl.innerText = currentBazi.full;
                 } else {
-                baziLine.style.display = 'none';
+                    baziLine.style.display = 'none';
                 }
                 resultPanel.style.display = 'block';
                 shakeBtn.disabled = true;
