@@ -109,15 +109,20 @@
             <div class="info-line"><span>🔄 变卦</span><span id="bianGuaDetail"></span></div>
             <div class="info-line"><span>⚡ 动爻</span><span id="dongYaoInfo"></span></div>
             <div id="baziInfoLine" class="info-line" style="background:#2c3e2b; color:#f7e9ce; display:none;"><span>🧧 生辰八字</span><span id="resultBazi"></span></div>
+        <!-- 👇 强化核心解读：AI解卦按钮放在最显眼的位置，尺寸加大 -->
+            <div style="text-align:center; margin-top: 16px;">
+                <button id="askAI" style="display:inline-block; background:#2c3e2b; color:#f7e9ce; padding:12px 28px; border-radius:40px; border:none; font-weight:bold; font-size:1rem; cursor:pointer; width:100%;">🤖 让 DeepSeek 深度解卦</button>
+            </div>
         </div>
-        <div style="text-align:center; margin: 12px 0 4px;">
-            <a id="baziDetailLink" href="bazi.html" style="display:inline-block; background:#9b7b5c; color:#fff; padding:10px 24px; border-radius:40px; text-decoration:none; font-weight:bold;" target="_blank">📜 查看八字详解</a>
-            <button id="askAI" style="display:inline-block; background:#2c3e2b; color:#f7e9ce; padding:10px 24px; border-radius:40px; border:none; font-weight:bold; cursor:pointer; margin:8px;">🤖 让 DeepSeek 解卦</button>
-        </div>
+
+        <!-- 重置按钮 -->
         <button class="reset" id="resetBtn">🔄 重新起卦 · 再卜一卦</button>
-    </div>
-    <div class="nav-links" style="text-align:center; margin: 16px 0 8px;">
-        <a href="wuxing.html" style="display:inline-block; background:#cdb59b; color:#fff; padding:10px 24px; border-radius:40px; text-decoration:none; font-weight:bold;" target="_blank">👗 五行穿衣指南</a>
+
+        <!-- 👇 次要功能整合在一起：八字详情、五行穿衣 -->
+        <div style="text-align:center; margin: 12px 0 8px;">
+            <a id="baziDetailLink" href="bazi.html" style="display:inline-block; background:#9b7b5c; color:#fff; padding:8px 20px; border-radius:40px; text-decoration:none; font-weight:bold; font-size:0.85rem; margin:4px;" target="_blank">📜 八字详解</a>
+            <a href="wuxing.html" style="display:inline-block; background:#cdb59b; color:#fff; padding:8px 20px; border-radius:40px; text-decoration:none; font-weight:bold; font-size:0.85rem; margin:4px;" target="_blank">👗 五行穿衣</a>
+        </div>
     </div>
     <footer>三枚铜钱 · 一爻一掷 · 老阴(6)老阳(9)为动爻</footer>
 </div>
