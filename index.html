@@ -237,9 +237,20 @@
             const s1 = c1?"阳":"阴", s2 = c2?"阳":"阴", s3 = c3?"阳":"阴";
             return { yaoValue: val, coinStr: `${s1}  ${s2}  ${s3}` };
         }
+        
+        function yaoSymbol(v) {
+        if (v === 6) return "⚋";   
+        if (v === 9) return "⚊";   
+        if (v === 7) return "⚊";  
+        return "⚋";              
+        }
 
-        function yaoSymbol(v) { return v===6||v===8?"🌛":"🌞"; }
-        function yaoTypeName(v) { return (v===6?"老阴":v===9?"老阳":v===7?"少阳":"少阴") + (v===6||v===9?" ⚋":" ⚊"); }
+        function yaoTypeName(v) {
+        if (v === 6) return "老阴 ×";
+        if (v === 9) return "老阳 o";
+        if (v === 7) return "少阳 ⚊";
+        return "少阴 ⚋";
+        }
 
         function analyzeYao(vals) {
             const ben=[], bian=[], dong=[];
