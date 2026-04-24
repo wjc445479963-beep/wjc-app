@@ -95,7 +95,7 @@
                 <label>时辰</label>
                 <select id="hourSelect"></select>
             </div>
-            <button class="btn-bazi-apply" id="applyBazi">✨ 应用此八字</button>
+            <button class="btn-bazi-apply" id="applyBazi">应用此八字</button>
             <p style="font-size:0.7rem; color:#8b7355; text-align:center; margin:4px 0 8px;">👆 八字为选填，若不填则结果中不显示</p>
             <div class="bazi-display" id="baziDisplay">请选择出生时间</div>
         </div>
@@ -109,7 +109,7 @@
             <div class="info-line"><span>📖 本卦</span><span id="benGuaDetail"></span></div>
             <div class="info-line"><span>🔄 变卦</span><span id="bianGuaDetail"></span></div>
             <div class="info-line"><span>⚡ 动爻</span><span id="dongYaoInfo"></span></div>
-            <div class="info-line" style="background: #2c3e2b; color: #f7e9ce;"><span>🧧 生辰八字</span><span id="resultBazi"></span></div>
+            <div id="baziInfoLine" class="info-line" style="background: #2c3e2b; color: #f7e9ce; display: none;"><span>🧧 生辰八字</span><span id="resultBazi"></span></div>
         </div>
         <div style="text-align:center; margin: 12px 0 4px;">
             <a id="baziDetailLink" href="bazi.html" style="display:inline-block; background:#9b7b5c; color:#fff; padding:10px 24px; border-radius:40px; text-decoration:none; font-weight:bold;" target="_blank">📜 查看八字详解</a>
@@ -208,7 +208,13 @@
                 currentBazi = bazi;
                 document.getElementById('baziDisplay').innerText = `八字：${bazi.full}`;
                 if (step === 6) {
+                    const baziLine = document.getElementById('baziInfoLine');
+                    if (bazi.full !== '未设置') {
+                    baziLine.style.display = 'flex';
                     document.getElementById('resultBazi').innerText = bazi.full;
+                    } else {
+                    baziLine.style.display = 'none';
+                    }
                 }
             } catch (e) {
                 console.warn('八字计算异常', e);
@@ -297,8 +303,8 @@
         }
 
         function yaoTypeName(val) {
-            if (val === 6) return "老阴 ⚋ (动)";
-            if (val === 9) return "老阳 ⚊ (动)";
+            if (val === 6) return "老阴 ⚋";
+            if (val === 9) return "老阳 ⚊";
             if (val === 7) return "少阳 ⚊";
             return "少阴 ⚋";
         }
@@ -356,7 +362,13 @@
                 benGuaDetailEl.innerText = analysis.benGua;
                 bianGuaDetailEl.innerText = analysis.bianGua;
                 dongYaoInfoEl.innerText = analysis.dongText;
+                const baziLine = document.getElementById('baziInfoLine');
+                if (currentBazi.full !== '未设置') {
+                baziLine.style.display = 'flex';
                 resultBaziEl.innerText = currentBazi.full;
+                } else {
+                baziLine.style.display = 'none';
+                }
                 resultPanel.style.display = 'block';
                 shakeBtn.disabled = true;
                 const year = document.getElementById('yearSelect').value;
