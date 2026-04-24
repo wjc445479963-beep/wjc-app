@@ -206,19 +206,27 @@
         });
         document.getElementById('applyBazi').addEventListener('click', updateBaziDisplay);
 
-        // ---------- 八卦系统（已逐卦校正，绝对准确）----------
+        // ---------- 八卦系统（已根据用户提供的64卦列表完全修正）----------
         const GUA_64_NAMES = [];
         (function buildNames(){
             function getGuaSuffix(shang, xia) {
                 const map = {
-                    "0,0": "坤", "0,1": "剥", "0,2": "比", "0,3": "观", "0,4": "豫", "0,5": "晋", "0,6": "萃", "0,7": "否",
-                    "1,0": "谦", "1,1": "艮", "1,2": "蹇", "1,3": "渐", "1,4": "颐", "1,5": "旅", "1,6": "损", "1,7": "遁",
-                    "2,0": "师", "2,1": "蒙", "2,2": "坎", "2,3": "涣", "2,4": "解", "2,5": "未济", "2,6": "困", "2,7": "讼",
-                    "3,0": "升", "3,1": "蛊", "3,2": "井", "3,3": "巽", "3,4": "恒", "3,5": "鼎", "3,6": "大过", "3,7": "姤",
-                    "4,0": "复", "4,1": "小过", "4,2": "屯", "4,3": "益", "4,4": "震", "4,5": "噬嗑", "4,6": "随", "4,7": "无妄",
-                    "5,0": "明夷", "5,1": "贲", "5,2": "既济", "5,3": "家人", "5,4": "丰", "5,5": "离", "5,6": "革", "5,7": "同人",
-                    "6,0": "临", "6,1": "咸", "6,2": "节", "6,3": "中孚", "6,4": "归妹", "6,5": "睽", "6,6": "兑", "6,7": "履",
-                    "7,0": "泰", "7,1": "大畜", "7,2": "需", "7,3": "小畜", "7,4": "大壮", "7,5": "大有", "7,6": "夬", "7,7": "乾"
+                    // 上坤(0)
+                    "0,1": "谦", "0,2": "师", "0,3": "升", "0,4": "复", "0,5": "明夷", "0,6": "临", "0,7": "泰",
+                    // 上艮(1)
+                    "1,0": "剥", "1,2": "蒙", "1,3": "蛊", "1,4": "颐", "1,5": "贲", "1,6": "损", "1,7": "大畜",
+                    // 上坎(2)
+                    "2,0": "比", "2,1": "蹇", "2,3": "井", "2,4": "屯", "2,5": "既济", "2,6": "节", "2,7": "需",
+                    // 上巽(3)
+                    "3,0": "观", "3,1": "渐", "3,2": "涣", "3,4": "益", "3,5": "家人", "3,6": "中孚", "3,7": "小畜",
+                    // 上震(4)
+                    "4,0": "豫", "4,1": "小过", "4,2": "解", "4,3": "恒", "4,5": "丰", "4,6": "归妹", "4,7": "大壮",
+                    // 上离(5)
+                    "5,0": "晋", "5,1": "旅", "5,2": "未济", "5,3": "鼎", "5,4": "噬嗑", "5,6": "睽", "5,7": "大有",
+                    // 上兑(6)
+                    "6,0": "萃", "6,1": "咸", "6,2": "困", "6,3": "大过", "6,4": "随", "6,5": "革", "6,7": "夬",
+                    // 上乾(7)
+                    "7,0": "否", "7,1": "遁", "7,2": "讼", "7,3": "姤", "7,4": "无妄", "7,5": "同人", "7,6": "履"
                 };
                 return map[shang+","+xia] || "";
             }
@@ -236,12 +244,14 @@
             }
         })();
         function getGuaName(sh, xi) { return GUA_64_NAMES[sh*8+xi] || "未知卦"; }
+
         function makeCoinHTML(c1, c2, c3) {
             const coin = (isYang) => isYang ? 
                 `<span class="coin-img coin-yang"><span class="char char-top">天</span><span class="char char-bottom">霸</span><span class="char char-left">寶</span><span class="char char-right">通</span></span>` :
                 `<span class="coin-img coin-yin"></span>`;
             return `<div class="coin-row">${coin(c1)}</div><div class="coin-row">${coin(c2)} ${coin(c3)}</div>`;
         }
+
         function throwCoins() {
             const c1 = Math.random()<0.5?0:1, c2 = Math.random()<0.5?0:1, c3 = Math.random()<0.5?0:1;
             const yang = c1+c2+c3;
@@ -249,16 +259,19 @@
             if (yang===0) val=6; else if (yang===1) val=7; else if (yang===2) val=8; else val=9;
             return { yaoValue: val, coinHTML: makeCoinHTML(c1, c2, c3) };
         }
+
         function yaoSymbolHTML(v) {
             if (v === 7 || v === 9) return '<span class="line-yang"></span>';
             return '<span class="line-yin"><span></span><span></span></span>';
         }
+
         function yaoTypeName(v) {
             if (v === 6) return "老阴";
             if (v === 9) return "老阳";
             if (v === 7) return "少阳";
             return "少阴";
         }
+
         function analyzeYao(vals) {
             const ben=[], bian=[], dong=[];
             for(let i=0;i<6;i++){
@@ -275,6 +288,7 @@
             const dongT = dong.length ? dong.join("、")+"爻动" : "静卦";
             return {benGua:benG, bianGua:bianG, dongText:dongT};
         }
+
         let step=0, currentYaos=[];
         const coinDisp=document.getElementById('coinDisplay'), shakeBtn=document.getElementById('shakeBtn');
         const yaoListDiv=document.getElementById('yaoList'), stepCtr=document.getElementById('stepCounter');
@@ -285,6 +299,7 @@
         const bianGuaDetailEl=document.getElementById('bianGuaDetail');
         const dongYaoInfoEl=document.getElementById('dongYaoInfo');
         const resultBaziEl=document.getElementById('resultBazi');
+
         function updateUI() {
             stepCtr.innerText = `第${step} / 6爻`;
             if (step===0) {
@@ -329,6 +344,7 @@
                 shakeBtn.disabled=false;
             }
         }
+
         function throwOnce() {
             if (step>=6) return;
             const {yaoValue, coinHTML} = throwCoins();
@@ -339,6 +355,7 @@
             setTimeout(()=> coinDisp.style.backgroundColor='#fef3e4', 120);
             updateUI();
         }
+
         function resetAll() {
             currentYaos=[]; step=0;
             coinDisp.innerHTML = makeCoinHTML(1,1,1);
@@ -346,6 +363,7 @@
             updateUI();
             shakeBtn.disabled=false;
         }
+
         shakeBtn.addEventListener('click', throwOnce);
         resetBtn.addEventListener('click', resetAll);
         resetAll();
