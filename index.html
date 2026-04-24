@@ -334,10 +334,18 @@
                 const hour=document.getElementById('hourSelect').value;
                 const link=document.getElementById('baziDetailLink');
                 if(link) link.href = `bazi.html?y=${year}&m=${month}&d=${day}&h=${hour}`;
-                const askBtn=document.getElementById('askAI');
-                if(askBtn) {
-                    const info=`${analysis.benGua}，动爻${analysis.dongText}。请帮我解读这个卦象的含义、吉凶和注意事项。`;
-                    askBtn.onclick = () => window.open(`https://chat.deepseek.com/?q=${encodeURIComponent(info)}`, '_blank', 'noopener,noreferrer');
+                const askBtn = document.getElementById('askAI');
+                if (askBtn) {
+                    const guaInfo = `${analysis.benGua}，动爻${analysis.dongText}。请帮我解读这个卦象的含义、吉凶和注意事项。`;
+                    askBtn.onclick = () => {
+                        navigator.clipboard.writeText(guaInfo).then(() => {
+                            alert('问题已复制到剪贴板！\n即将打开 DeepSeek，登录后粘贴问题即可。');
+                            window.open('https://chat.deepseek.com/', '_blank', 'noopener,noreferrer');
+                        }).catch(() => {
+                            alert('自动复制失败，请手动复制：\n' + guaInfo);
+                            window.open('https://chat.deepseek.com/', '_blank', 'noopener,noreferrer');
+                        });
+                    };
                 }
             } else {
                 resultPanel.style.display='none';
