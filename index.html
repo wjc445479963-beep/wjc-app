@@ -9,22 +9,22 @@
     <script src="https://unpkg.com/lunar-javascript@1.6.13/lunar.js"></script>
     <style>
         * { box-sizing: border-box; user-select: none; }
-        body { background: #f5f0e7; font-family: 'Segoe UI', 'Noto Sans CJK SC', Roboto, 'Helvetica Neue', sans-serif; padding: 20px; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        body { background: #f5f0e7; font-family: 'Segoe UI', 'Noto Sans CJK SC', Roboto, sans-serif; padding: 20px; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         .container { max-width: 600px; width: 100%; background: #fffaf2; border-radius: 48px; box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05); padding: 24px 20px 32px; position: relative; }
         .title-section { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
         h1 { font-size: 1.8rem; margin: 0; color: #3e2a1f; font-weight: 500; letter-spacing: 2px; }
         .prob-badge { background: #2c3e2b; color: #f7e9ce; font-size: 0.7rem; padding: 4px 12px; border-radius: 40px; white-space: nowrap; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
         .sub { text-align: center; color: #8b7355; font-size: 0.85rem; border-bottom: 1px solid #ede3d4; padding-bottom: 16px; margin-bottom: 20px; }
-        .coin-area { background: #e8dfd1; border-radius: 80px; padding: 24px 16px; text-align: center; margin-bottom: 24px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.05); }
-        .coin-display { font-size: 2.2rem; letter-spacing: 20px; font-weight: 500; background: #fef3e4; display: inline-block; padding: 16px 28px; border-radius: 80px; box-shadow: 0 6px 0 #b59d7a; color: #c27e3a; font-family: monospace; }
-        .btn-shake { background: #9b7b5c; border: none; font-size: 1.4rem; font-weight: bold; padding: 12px 24px; border-radius: 60px; color: white; margin-top: 18px; width: 70%; cursor: pointer; transition: 0.1s; box-shadow: 0 3px 0 #5e3e28; font-family: inherit; }
+        .coin-area { background: #e8dfd1; border-radius: 80px; padding: 24px 16px; text-align: center; margin-bottom: 24px; }
+        .coin-display { font-size: 2.2rem; letter-spacing: 20px; font-weight: 500; background: #fef3e4; display: inline-block; padding: 16px 28px; border-radius: 80px; box-shadow: 0 6px 0 #b59d7a; color: #c27e3a; }
+        .btn-shake { background: #9b7b5c; border: none; font-size: 1.4rem; font-weight: bold; padding: 12px 24px; border-radius: 60px; color: white; margin-top: 18px; width: 70%; cursor: pointer; box-shadow: 0 3px 0 #5e3e28; }
         .btn-shake:active { transform: translateY(2px); box-shadow: 0 1px 0 #5e3e28; }
         .btn-shake:disabled { opacity: 0.5; transform: none; box-shadow: 0 3px 0 #5e3e28; cursor: not-allowed; }
         .records { background: #fdf8f0; border-radius: 32px; padding: 12px 16px; margin: 20px 0; border: 1px solid #ede0cf; }
         .yao-list { display: flex; flex-direction: column-reverse; gap: 8px; margin: 12px 0; }
-        .yao-item { background: white; border-radius: 60px; padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; border-left: 8px solid #c28a4e; box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 1rem; }
+        .yao-item { background: white; border-radius: 60px; padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; border-left: 8px solid #c28a4e; }
         .yao-position { font-weight: bold; width: 55px; color: #5a3e28; }
-        .yao-symbol { font-size: 1.8rem; line-height: 1; letter-spacing: 6px; font-family: 'Segoe UI', 'Noto Sans CJK SC', monospace; }
+        .yao-symbol { font-size: 1.8rem; line-height: 1; letter-spacing: 6px; }
         .yao-type { font-size: 0.8rem; background: #efe2d0; padding: 4px 12px; border-radius: 40px; color: #4a3624; }
 
         .bazi-section { margin-bottom: 16px; }
@@ -33,14 +33,14 @@
         .bazi-panel.hidden { display: none; }
         .picker-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
         .picker-row label { width: 60px; font-weight: bold; color: #5a3e28; align-self: center; }
-        .picker-row select { flex: 1; padding: 10px; border-radius: 30px; border: 1px solid #cbb295; background: white; font-size: 1rem; font-family: inherit; }
+        .picker-row select { flex: 1; padding: 10px; border-radius: 30px; border: 1px solid #cbb295; background: white; font-size: 1rem; }
         .bazi-display { background: #2c3e2b; color: #f7e9ce; padding: 10px 16px; border-radius: 40px; text-align: center; font-size: 1.1rem; letter-spacing: 2px; margin-top: 12px; }
         .btn-bazi-apply { background: #9b7b5c; color: white; border: none; border-radius: 40px; padding: 10px 20px; font-size: 1rem; width: 100%; margin-top: 8px; cursor: pointer; font-weight: bold; }
 
         .result-card { background: #f1e9de; border-radius: 28px; padding: 20px 16px; margin-top: 16px; border-top: 3px solid #dbbd96; }
-        .gua-name { font-size: 2.6rem; font-weight: bold; text-align: center; margin: 8px 0 16px; color: #2b4f3a; letter-spacing: 4px; }
+        .gua-name { font-size: 2.6rem; font-weight: bold; text-align: center; margin: 8px 0 16px; color: #2b4f3a; }
         .info-line { display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px 18px; border-radius: 40px; margin: 8px 0; font-size: 1rem; }
-        button.reset { background: #cdb59b; border: none; padding: 12px 20px; border-radius: 40px; font-size: 1.1rem; width: 100%; margin-top: 20px; font-weight: bold; cursor: pointer; transition: 0.1s; color: #2d241a; }
+        button.reset { background: #cdb59b; border: none; padding: 12px 20px; border-radius: 40px; font-size: 1.1rem; width: 100%; margin-top: 20px; font-weight: bold; cursor: pointer; color: #2d241a; }
         footer { font-size: 0.7rem; text-align: center; color: #b49b7c; margin-top: 20px; }
         .badge { background: #3e2a1f; color: #f9e5c1; border-radius: 40px; padding: 4px 12px; font-size: 0.7rem; display: inline-block; }
         .coin-hint { font-size: 0.8rem; margin-top: 12px; color: #7e623f; }
@@ -62,7 +62,7 @@
 
     <div class="records">
         <div style="display: flex; justify-content: space-between;">
-            <span>📜 卦爻记录 <span style="font-size:0.7rem;">(初爻在下)</span></span>
+            <span>📜 卦爻记录 (初爻在下)</span>
             <span class="badge" id="stepCounter">第0 / 6爻</span>
         </div>
         <div id="yaoList" class="yao-list">
@@ -74,7 +74,8 @@
         <div class="bazi-toggle" id="baziToggle">
             <span>📅 设定生辰八字</span>
         </div>
-        <div class="bazi-panel" id="baziPanel">
+        <p style="font-size:0.7rem; color:#8b7355; text-align:center; margin:8px 0 4px;">👆 八字为选填，若不填则结果中不显示</p>
+        <div class="bazi-panel hidden" id="baziPanel">
             <div class="picker-row">
                 <label>年份</label>
                 <select id="yearSelect"></select>
@@ -92,7 +93,6 @@
                 <select id="hourSelect"></select>
             </div>
             <button class="btn-bazi-apply" id="applyBazi">应用此八字</button>
-            <p style="font-size:0.7rem; color:#8b7355; text-align:center; margin:4px 0 8px;">👆 八字为选填，若不填则结果中不显示</p>
             <div class="bazi-display" id="baziDisplay">请选择出生时间</div>
         </div>
     </div>
@@ -104,7 +104,7 @@
             <div class="info-line"><span>📖 本卦</span><span id="benGuaDetail"></span></div>
             <div class="info-line"><span>🔄 变卦</span><span id="bianGuaDetail"></span></div>
             <div class="info-line"><span>⚡ 动爻</span><span id="dongYaoInfo"></span></div>
-            <div id="baziInfoLine" class="info-line" style="background: #2c3e2b; color: #f7e9ce; display: none;"><span>🧧 生辰八字</span><span id="resultBazi"></span></div>
+            <div id="baziInfoLine" class="info-line" style="background:#2c3e2b; color:#f7e9ce; display:none;"><span>🧧 生辰八字</span><span id="resultBazi"></span></div>
         </div>
         <div style="text-align:center; margin: 12px 0 4px;">
             <a id="baziDetailLink" href="bazi.html" style="display:inline-block; background:#9b7b5c; color:#fff; padding:10px 24px; border-radius:40px; text-decoration:none; font-weight:bold;" target="_blank">📜 查看八字详解</a>
@@ -112,7 +112,7 @@
         </div>
         <button class="reset" id="resetBtn">🔄 重新起卦 · 再卜一卦</button>
     </div>
-    <div style="text-align:center; margin: 16px 0 8px;">
+    <div class="nav-links" style="text-align:center; margin: 16px 0 8px;">
         <a href="wuxing.html" style="display:inline-block; background:#cdb59b; color:#fff; padding:10px 24px; border-radius:40px; text-decoration:none; font-weight:bold;" target="_blank">👗 五行穿衣指南</a>
     </div>
     <footer>三枚铜钱 · 一爻一掷 · 老阴(6)老阳(9)为动爻</footer>
@@ -122,300 +122,215 @@
     (function(){
         "use strict";
 
-        // ---------- 八字计算 ----------
         let currentBazi = { year: '', month: '', day: '', hour: '', full: '未设置' };
-        
+
         function initDateSelects() {
             const yearSelect = document.getElementById('yearSelect');
             const monthSelect = document.getElementById('monthSelect');
             const daySelect = document.getElementById('daySelect');
             const hourSelect = document.getElementById('hourSelect');
-            
             const currentYear = new Date().getFullYear();
             for (let y = 1900; y <= currentYear + 1; y++) {
                 const option = document.createElement('option');
-                option.value = y;
-                option.textContent = y + '年';
+                option.value = y; option.textContent = y + '年';
                 if (y === 2000) option.selected = true;
                 yearSelect.appendChild(option);
             }
-            
             for (let m = 1; m <= 12; m++) {
                 const option = document.createElement('option');
-                option.value = m;
-                option.textContent = m + '月';
+                option.value = m; option.textContent = m + '月';
                 monthSelect.appendChild(option);
             }
-            
             function updateDays() {
-                const year = parseInt(yearSelect.value);
-                const month = parseInt(monthSelect.value);
-                const daysInMonth = new Date(year, month, 0).getDate();
+                const y = parseInt(yearSelect.value), m = parseInt(monthSelect.value);
+                const days = new Date(y, m, 0).getDate();
                 daySelect.innerHTML = '';
-                for (let d = 1; d <= daysInMonth; d++) {
-                    const option = document.createElement('option');
-                    option.value = d;
-                    option.textContent = d + '日';
-                    daySelect.appendChild(option);
+                for (let d = 1; d <= days; d++) {
+                    const opt = document.createElement('option');
+                    opt.value = d; opt.textContent = d + '日';
+                    daySelect.appendChild(opt);
                 }
             }
-            
             yearSelect.addEventListener('change', updateDays);
             monthSelect.addEventListener('change', updateDays);
             updateDays();
-            
-            const hourNames = ['子时 (23-01)', '丑时 (01-03)', '寅时 (03-05)', '卯时 (05-07)', 
-                               '辰时 (07-09)', '巳时 (09-11)', '午时 (11-13)', '未时 (13-15)', 
-                               '申时 (15-17)', '酉时 (17-19)', '戌时 (19-21)', '亥时 (21-23)'];
-            hourNames.forEach((name, idx) => {
-                const option = document.createElement('option');
-                option.value = idx;
-                option.textContent = name;
-                hourSelect.appendChild(option);
+            const hourNames = ['子时 (23-01)','丑时 (01-03)','寅时 (03-05)','卯时 (05-07)',
+                               '辰时 (07-09)','巳时 (09-11)','午时 (11-13)','未时 (13-15)',
+                               '申时 (15-17)','酉时 (17-19)','戌时 (19-21)','亥时 (21-23)'];
+            hourNames.forEach((n,i) => {
+                const opt = document.createElement('option');
+                opt.value = i; opt.textContent = n;
+                hourSelect.appendChild(opt);
             });
             hourSelect.value = 6;
         }
         initDateSelects();
 
         function computeBazi() {
-            const year = parseInt(document.getElementById('yearSelect').value);
-            const month = parseInt(document.getElementById('monthSelect').value);
-            const day = parseInt(document.getElementById('daySelect').value);
-            const hourIndex = parseInt(document.getElementById('hourSelect').value);
-            
-            const date = new Date(year, month-1, day, (hourIndex * 2) % 24, 0, 0);
+            const y = parseInt(document.getElementById('yearSelect').value);
+            const m = parseInt(document.getElementById('monthSelect').value);
+            const d = parseInt(document.getElementById('daySelect').value);
+            const h = parseInt(document.getElementById('hourSelect').value);
+            const date = new Date(y, m-1, d, (h * 2) % 24, 0, 0);
             const lunar = window.Lunar.fromDate(date);
-            const eightChar = lunar.getEightChar();
-            
-            const full = `${eightChar.getYear()} ${eightChar.getMonth()} ${eightChar.getDay()} ${eightChar.getTime()}`;
-            return {
-                year: eightChar.getYear(),
-                month: eightChar.getMonth(),
-                day: eightChar.getDay(),
-                hour: eightChar.getTime(),
-                full: full
-            };
+            const ec = lunar.getEightChar();
+            const full = `${ec.getYear()} ${ec.getMonth()} ${ec.getDay()} ${ec.getTime()}`;
+            return { year: ec.getYear(), month: ec.getMonth(), day: ec.getDay(), hour: ec.getTime(), full: full };
         }
 
-        // 仅更新面板预览，不改变 currentBazi
-        function refreshBaziPreview() {
+        function updateBaziDisplay() {
             try {
-                const bazi = computeBazi();
-                document.getElementById('baziDisplay').innerText = `八字：${bazi.full}`;
-            } catch (e) {
+                const b = computeBazi();
+                currentBazi = b;
+                document.getElementById('baziDisplay').innerText = `八字：${b.full}`;
+                if (step === 6) {
+                    const line = document.getElementById('baziInfoLine');
+                    if (b.full !== '未设置') {
+                        line.style.display = 'flex';
+                        document.getElementById('resultBazi').innerText = b.full;
+                    } else {
+                        line.style.display = 'none';
+                    }
+                }
+            } catch(e) {
                 document.getElementById('baziDisplay').innerText = '八字计算失败';
             }
         }
 
-        // 正式应用八字（更新 currentBazi 并控制结果行显示）
-        function updateBaziDisplay() {
-            try {
-                const bazi = computeBazi();
-                currentBazi = bazi;
-                document.getElementById('baziDisplay').innerText = `八字：${bazi.full}`;
-                if (step === 6) {
-                    const baziLine = document.getElementById('baziInfoLine');
-                    if (bazi.full !== '未设置') {
-                        baziLine.style.display = 'flex';
-                        document.getElementById('resultBazi').innerText = bazi.full;
-                    } else {
-                        baziLine.style.display = 'none';
-                    }
-                }
-            } catch (e) {
-                console.warn('八字计算异常', e);
-                document.getElementById('baziDisplay').innerText = '八字计算失败，请重试';
-            }
-        }
-
         // 切换面板
-        const toggleBtn = document.getElementById('baziToggle');
-        const panel = document.getElementById('baziPanel');
-        toggleBtn.addEventListener('click', () => {
-            panel.classList.toggle('hidden');
+        document.getElementById('baziToggle').addEventListener('click', () => {
+            document.getElementById('baziPanel').classList.toggle('hidden');
         });
+        document.getElementById('applyBazi').addEventListener('click', updateBaziDisplay);
 
-        // 点击“应用此八字”时才正式应用
-        document.getElementById('applyBazi').addEventListener('click', () => {
-            updateBaziDisplay();
-        });
-
-        // 初始预览（不应用）
-        refreshBaziPreview();
-
-        // ---------- 八卦基础 ----------
-        const GUA_8_NAMES = ["坤", "艮", "坎", "巽", "震", "离", "兑", "乾"];
-        
-        function build64GuaNames() {
-            const arr = [];
-            for (let shang = 0; shang < 8; shang++) {
-                for (let xia = 0; xia < 8; xia++) {
-                    let fullName = "";
-                    if (shang === xia) {
-                        const pureMap = ["坤为地","艮为山","坎为水","巽为风","震为雷","离为火","兑为泽","乾为天"];
-                        fullName = pureMap[shang];
-                    } else {
-                        const shangSymbol = ["地","山","水","风","雷","火","泽","天"][shang];
-                        const xiaSymbol = ["地","山","水","风","雷","火","泽","天"][xia];
-                        fullName = shangSymbol + xiaSymbol + getGuaSuffix(shang, xia);
+        // ---------- 八卦系统 ----------
+        const GUA_64_NAMES = [];
+        (function buildNames(){
+            const suffixMap = {
+                "0,1":"剥","0,2":"比","0,3":"观","0,4":"豫","0,5":"晋","0,6":"萃","0,7":"否",
+                "1,0":"谦","1,2":"蹇","1,3":"渐","1,4":"小过","1,5":"旅","1,6":"咸","1,7":"遁",
+                "2,0":"师","2,1":"蒙","2,3":"涣","2,4":"解","2,5":"未济","2,6":"困","2,7":"讼",
+                "3,0":"升","3,1":"蛊","3,2":"井","3,4":"恒","3,5":"鼎","3,6":"大过","3,7":"姤",
+                "4,0":"复","4,1":"颐","4,2":"屯","4,3":"益","4,5":"噬嗑","4,6":"随","4,7":"无妄",
+                "5,0":"明夷","5,1":"贲","5,2":"既济","5,3":"家人","5,4":"丰","5,6":"革","5,7":"同人",
+                "6,0":"临","6,1":"损","6,2":"节","6,3":"中孚","6,4":"归妹","6,5":"睽","6,7":"履",
+                "7,0":"泰","7,1":"大畜","7,2":"需","7,3":"小畜","7,4":"大壮","7,5":"大有","7,6":"夬"
+            };
+            for (let sh=0; sh<8; sh++) {
+                for (let xi=0; xi<8; xi++) {
+                    if (sh===xi) GUA_64_NAMES.push(["坤为地","艮为山","坎为水","巽为风","震为雷","离为火","兑为泽","乾为天"][sh]);
+                    else {
+                        const ss=["地","山","水","风","雷","火","泽","天"][sh];
+                        const xs=["地","山","水","风","雷","火","泽","天"][xi];
+                        GUA_64_NAMES.push(ss + xs + (suffixMap[sh+","+xi] || ""));
                     }
-                    arr.push(fullName);
                 }
             }
-            return arr;
-        }
-
-        function getGuaSuffix(shang, xia) {
-            const map = {
-                "0,1":"剥", "0,2":"比", "0,3":"观", "0,4":"豫", "0,5":"晋", "0,6":"萃", "0,7":"否",
-                "1,0":"谦", "1,2":"蹇", "1,3":"渐", "1,4":"小过", "1,5":"旅", "1,6":"咸", "1,7":"遁",
-                "2,0":"师", "2,1":"蒙", "2,3":"涣", "2,4":"解", "2,5":"未济", "2,6":"困", "2,7":"讼",
-                "3,0":"升", "3,1":"蛊", "3,2":"井", "3,4":"恒", "3,5":"鼎", "3,6":"大过", "3,7":"姤",
-                "4,0":"复", "4,1":"颐", "4,2":"屯", "4,3":"益", "4,5":"噬嗑", "4,6":"随", "4,7":"无妄",
-                "5,0":"明夷", "5,1":"贲", "5,2":"既济", "5,3":"家人", "5,4":"丰", "5,6":"革", "5,7":"同人",
-                "6,0":"临", "6,1":"损", "6,2":"节", "6,3":"中孚", "6,4":"归妹", "6,5":"睽", "6,7":"履",
-                "7,0":"泰", "7,1":"大畜", "7,2":"需", "7,3":"小畜", "7,4":"大壮", "7,5":"大有", "7,6":"夬"
-            };
-            return map[shang+","+xia] || "";
-        }
-
-        const GUA_64_NAMES = build64GuaNames();
-        function getGuaName(shang, xia) {
-            return GUA_64_NAMES[shang * 8 + xia] || "未知卦";
-        }
+        })();
+        function getGuaName(sh, xi) { return GUA_64_NAMES[sh*8+xi] || "未知卦"; }
 
         function throwCoins() {
-            const c1 = Math.random() < 0.5 ? 0 : 1;
-            const c2 = Math.random() < 0.5 ? 0 : 1;
-            const c3 = Math.random() < 0.5 ? 0 : 1;
-            const yangCount = c1 + c2 + c3;
-            let yaoValue;
-            if (yangCount === 0) yaoValue = 6;
-            else if (yangCount === 1) yaoValue = 7;
-            else if (yangCount === 2) yaoValue = 8;
-            else yaoValue = 9;
-            const char1 = c1 === 1 ? "阳" : "阴";
-            const char2 = c2 === 1 ? "阳" : "阴";
-            const char3 = c3 === 1 ? "阳" : "阴";
-            return { yaoValue, coinStr: `${char1}  ${char2}  ${char3}` };
+            const c1 = Math.random()<0.5?0:1, c2 = Math.random()<0.5?0:1, c3 = Math.random()<0.5?0:1;
+            const yang = c1+c2+c3;
+            let val;
+            if (yang===0) val=6; else if (yang===1) val=7; else if (yang===2) val=8; else val=9;
+            const s1 = c1?"阳":"阴", s2 = c2?"阳":"阴", s3 = c3?"阳":"阴";
+            return { yaoValue: val, coinStr: `${s1}  ${s2}  ${s3}` };
         }
 
-        function yaoSymbol(val) {
-            if (val === 6) return "🌛";
-            if (val === 9) return "🌞";
-            if (val === 7) return "🌞";
-            return "🌛";
-        }
+        function yaoSymbol(v) { return v===6||v===8?"🌛":"🌞"; }
+        function yaoTypeName(v) { return (v===6?"老阴":v===9?"老阳":v===7?"少阳":"少阴") + (v===6||v===9?" ⚋":" ⚊"); }
 
-        function yaoTypeName(val) {
-            if (val === 6) return "老阴 ⚋";
-            if (val === 9) return "老阳 ⚊";
-            if (val === 7) return "少阳 ⚊";
-            return "少阴 ⚋";
-        }
-
-        function analyzeYao(yaoValues) {
-            const benBinary = [], bianBinary = [], dongList = [];
-            for (let i=0; i<6; i++) {
-                const val = yaoValues[i];
-                const benBit = (val===7||val===9)?1:0;
-                let bianBit = benBit;
-                if (val===6) { bianBit=1; dongList.push(i+1); }
-                else if (val===9) { bianBit=0; dongList.push(i+1); }
-                benBinary.push(benBit);
-                bianBinary.push(bianBit);
+        function analyzeYao(vals) {
+            const ben=[], bian=[], dong=[];
+            for(let i=0;i<6;i++){
+                const v=vals[i], b=(v===7||v===9)?1:0;
+                let bb=b;
+                if(v===6){ bb=1; dong.push(i+1); }
+                else if(v===9){ bb=0; dong.push(i+1); }
+                ben.push(b); bian.push(bb);
             }
-            const xiaBen = benBinary[0]*4 + benBinary[1]*2 + benBinary[2]*1;
-            const shangBen = benBinary[3]*4 + benBinary[4]*2 + benBinary[5]*1;
-            const benGua = getGuaName(shangBen, xiaBen);
-            const xiaBian = bianBinary[0]*4 + bianBinary[1]*2 + bianBinary[2]*1;
-            const shangBian = bianBinary[3]*4 + bianBinary[4]*2 + bianBinary[5]*1;
-            const bianGua = getGuaName(shangBian, xiaBian);
-            const dongText = dongList.length ? dongList.join("、") + "爻动" : "静卦";
-            return { benGua, bianGua, dongText };
+            const xiaB = ben[0]*4+ben[1]*2+ben[2], shangB = ben[3]*4+ben[4]*2+ben[5];
+            const benG = getGuaName(shangB, xiaB);
+            const xiaB2 = bian[0]*4+bian[1]*2+bian[2], shangB2 = bian[3]*4+bian[4]*2+bian[5];
+            const bianG = getGuaName(shangB2, xiaB2);
+            const dongT = dong.length ? dong.join("、")+"爻动" : "静卦";
+            return {benGua:benG, bianGua:bianG, dongText:dongT};
         }
 
-        let currentYaos = [], step = 0;
-        const coinDisplay = document.getElementById('coinDisplay');
-        const shakeBtn = document.getElementById('shakeBtn');
-        const yaoListDiv = document.getElementById('yaoList');
-        const stepCounterSpan = document.getElementById('stepCounter');
-        const resultPanel = document.getElementById('resultPanel');
-        const resetBtn = document.getElementById('resetBtn');
-        const benGuaNameEl = document.getElementById('benGuaName');
-        const benGuaDetailEl = document.getElementById('benGuaDetail');
-        const bianGuaDetailEl = document.getElementById('bianGuaDetail');
-        const dongYaoInfoEl = document.getElementById('dongYaoInfo');
-        const resultBaziEl = document.getElementById('resultBazi');
+        let step=0, currentYaos=[];
+        const coinDisp=document.getElementById('coinDisplay'), shakeBtn=document.getElementById('shakeBtn');
+        const yaoListDiv=document.getElementById('yaoList'), stepCtr=document.getElementById('stepCounter');
+        const resultPanel=document.getElementById('resultPanel');
+        const resetBtn=document.getElementById('resetBtn');
+        const benGuaNameEl=document.getElementById('benGuaName');
+        const benGuaDetailEl=document.getElementById('benGuaDetail');
+        const bianGuaDetailEl=document.getElementById('bianGuaDetail');
+        const dongYaoInfoEl=document.getElementById('dongYaoInfo');
+        const resultBaziEl=document.getElementById('resultBazi');
 
         function updateUI() {
-            stepCounterSpan.innerText = `第${step} / 6爻`;
-            if (step === 0) {
-                yaoListDiv.innerHTML = `<div style="text-align:center; color:#b89a74; padding:12px;">🎲 掷第一爻 · 初爻</div>`;
+            stepCtr.innerText = `第${step} / 6爻`;
+            if (step===0) {
+                yaoListDiv.innerHTML = '<div style="text-align:center; color:#b89a74; padding:12px;">🎲 掷第一爻 · 初爻</div>';
             } else {
-                let html = '';
-                for (let i=0; i<currentYaos.length; i++) {
-                    const val = currentYaos[i];
-                    const posName = ["初爻","二爻","三爻","四爻","五爻","上爻"][i];
-                    html += `<div class="yao-item"><span class="yao-position">${posName}</span><span class="yao-symbol">${yaoSymbol(val)}</span><span class="yao-type">${yaoTypeName(val)}</span></div>`;
+                let h='';
+                for (let i=0;i<currentYaos.length;i++) {
+                    const v=currentYaos[i];
+                    const pos=["初爻","二爻","三爻","四爻","五爻","上爻"][i];
+                    h += `<div class="yao-item"><span class="yao-position">${pos}</span><span class="yao-symbol">${yaoSymbol(v)}</span><span class="yao-type">${yaoTypeName(v)}</span></div>`;
                 }
-                yaoListDiv.innerHTML = html;
+                yaoListDiv.innerHTML = h;
             }
-            if (step === 6) {
-                const analysis = analyzeYao(currentYaos);
-                benGuaNameEl.innerText = analysis.benGua;
-                benGuaDetailEl.innerText = analysis.benGua;
-                bianGuaDetailEl.innerText = analysis.bianGua;
-                dongYaoInfoEl.innerText = analysis.dongText;
-                const baziLine = document.getElementById('baziInfoLine');
+            if (step===6) {
+                const analysis=analyzeYao(currentYaos);
+                benGuaNameEl.innerText=analysis.benGua;
+                benGuaDetailEl.innerText=analysis.benGua;
+                bianGuaDetailEl.innerText=analysis.bianGua;
+                dongYaoInfoEl.innerText=analysis.dongText;
+                const line=document.getElementById('baziInfoLine');
                 if (currentBazi.full !== '未设置') {
-                    baziLine.style.display = 'flex';
-                    resultBaziEl.innerText = currentBazi.full;
+                    line.style.display='flex';
+                    resultBaziEl.innerText=currentBazi.full;
                 } else {
-                    baziLine.style.display = 'none';
+                    line.style.display='none';
                 }
-                resultPanel.style.display = 'block';
-                shakeBtn.disabled = true;
-                const year = document.getElementById('yearSelect').value;
-                const month = document.getElementById('monthSelect').value;
-                const day = document.getElementById('daySelect').value;
-                const hour = document.getElementById('hourSelect').value;
-                const link = document.getElementById('baziDetailLink');
-                if (link) {
-                    link.href = `bazi.html?y=${year}&m=${month}&d=${day}&h=${hour}`;
-                }
-                const askBtn = document.getElementById('askAI');
-                if (askBtn) {
-                    const guaInfo = `${analysis.benGua}，动爻${analysis.dongText}。请帮我解读这个卦象的含义、吉凶和注意事项。`;
-                    askBtn.onclick = () => {
-                        window.open(`https://chat.deepseek.com/?q=${encodeURIComponent(guaInfo)}`, '_blank', 'noopener,noreferrer');
-                    };
+                resultPanel.style.display='block';
+                shakeBtn.disabled=true;
+                const year=document.getElementById('yearSelect').value;
+                const month=document.getElementById('monthSelect').value;
+                const day=document.getElementById('daySelect').value;
+                const hour=document.getElementById('hourSelect').value;
+                const link=document.getElementById('baziDetailLink');
+                if(link) link.href = `bazi.html?y=${year}&m=${month}&d=${day}&h=${hour}`;
+                const askBtn=document.getElementById('askAI');
+                if(askBtn) {
+                    const info=`${analysis.benGua}，动爻${analysis.dongText}。请帮我解读这个卦象的含义、吉凶和注意事项。`;
+                    askBtn.onclick = () => window.open(`https://chat.deepseek.com/?q=${encodeURIComponent(info)}`, '_blank', 'noopener,noreferrer');
                 }
             } else {
-                resultPanel.style.display = 'none';
-                shakeBtn.disabled = false;
+                resultPanel.style.display='none';
+                shakeBtn.disabled=false;
             }
         }
 
         function throwOnce() {
-            if (step >= 6) return;
-            const { yaoValue, coinStr } = throwCoins();
+            if (step>=6) return;
+            const {yaoValue, coinStr} = throwCoins();
             currentYaos.push(yaoValue);
             step++;
-            coinDisplay.innerText = coinStr;
-            coinDisplay.style.transition = '0.08s';
-            coinDisplay.style.backgroundColor = '#f5e2c1';
-            setTimeout(() => coinDisplay.style.backgroundColor = '#fef3e4', 120);
+            coinDisp.innerText = coinStr;
+            coinDisp.style.backgroundColor='#f5e2c1';
+            setTimeout(()=> coinDisp.style.backgroundColor='#fef3e4', 120);
             updateUI();
         }
 
         function resetAll() {
-            currentYaos = [];
-            step = 0;
-            coinDisplay.innerText = "阳 阳 阳";
-            coinDisplay.style.backgroundColor = '#fef3e4';
+            currentYaos=[]; step=0;
+            coinDisp.innerText='阳 阳 阳';
+            coinDisp.style.backgroundColor='#fef3e4';
             updateUI();
-            shakeBtn.disabled = false;
+            shakeBtn.disabled=false;
         }
 
         shakeBtn.addEventListener('click', throwOnce);
@@ -423,8 +338,6 @@
         resetAll();
     })();
 </script>
-
-<!-- Service Worker 注册 -->
 <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
