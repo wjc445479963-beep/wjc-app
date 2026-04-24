@@ -16,7 +16,22 @@
         .prob-badge { background: #2c3e2b; color: #f7e9ce; font-size: 0.7rem; padding: 4px 12px; border-radius: 40px; white-space: nowrap; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
         .sub { text-align: center; color: #8b7355; font-size: 0.85rem; border-bottom: 1px solid #ede3d4; padding-bottom: 16px; margin-bottom: 20px; }
         .coin-area { background: #e8dfd1; border-radius: 80px; padding: 24px 16px; text-align: center; margin-bottom: 24px; }
-        .coin-display { font-size: 2.2rem; letter-spacing: 20px; font-weight: 500; background: #fef3e4; display: inline-block; padding: 16px 28px; border-radius: 80px; box-shadow: 0 6px 0 #b59d7a; color: #c27e3a; }
+        .coin-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            background: #fef3e4;
+            border-radius: 80px;
+            padding: 20px 24px;
+            box-shadow: 0 6px 0 #b59d7a;
+            margin-bottom: 6px;
+        }
+        .coin-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
         .btn-shake { background: #9b7b5c; border: none; font-size: 1.4rem; font-weight: bold; padding: 12px 24px; border-radius: 60px; color: white; margin-top: 18px; width: 70%; cursor: pointer; box-shadow: 0 3px 0 #5e3e28; }
         .btn-shake:active { transform: translateY(2px); box-shadow: 0 1px 0 #5e3e28; }
         .btn-shake:disabled { opacity: 0.5; transform: none; box-shadow: 0 3px 0 #5e3e28; cursor: not-allowed; }
@@ -24,8 +39,29 @@
         .yao-list { display: flex; flex-direction: column-reverse; gap: 8px; margin: 12px 0; }
         .yao-item { background: white; border-radius: 60px; padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; border-left: 8px solid #c28a4e; }
         .yao-position { font-weight: bold; width: 55px; color: #5a3e28; }
-        .yao-symbol { font-size: 1.8rem; line-height: 1; letter-spacing: 6px; }
+        .yao-symbol { display: inline-flex; align-items: center; justify-content: center; width: 50px; }
         .yao-type { font-size: 0.8rem; background: #efe2d0; padding: 4px 12px; border-radius: 40px; color: #4a3624; }
+
+        /* 爻线 CSS 画法 */
+        .line-yang {
+            display: inline-block;
+            width: 40px;
+            height: 4px;
+            background: #3e2a1f;
+            border-radius: 2px;
+        }
+        .line-yin {
+            display: inline-flex;
+            justify-content: space-between;
+            width: 40px;
+        }
+        .line-yin span {
+            display: inline-block;
+            width: 16px;
+            height: 4px;
+            background: #3e2a1f;
+            border-radius: 2px;
+        }
 
         .bazi-section { margin-bottom: 16px; }
         .bazi-toggle { background: #e8dfd1; border-radius: 40px; padding: 10px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-weight: 500; color: #4a3624; border: 1px solid #d6c4ae; }
@@ -44,6 +80,51 @@
         footer { font-size: 0.7rem; text-align: center; color: #b49b7c; margin-top: 20px; }
         .badge { background: #3e2a1f; color: #f9e5c1; border-radius: 40px; padding: 4px 12px; font-size: 0.7rem; display: inline-block; }
         .coin-hint { font-size: 0.8rem; margin-top: 12px; color: #7e623f; }
+
+        /* 铜币样式 (天霸通寶) */
+        .coin-img {
+            display: inline-block;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            vertical-align: middle;
+            position: relative;
+            box-shadow: 
+                0 4px 12px rgba(0,0,0,0.4),
+                inset 0 2px 6px rgba(255,255,255,0.5),
+                inset 0 -2px 6px rgba(0,0,0,0.3);
+        }
+        .coin-yang {
+            background: radial-gradient(circle at 45% 40%, #fde482 5%, #e2b13b 40%, #b87c1a 75%, #7a4f0e 100%);
+        }
+        .coin-yin {
+            background: radial-gradient(circle at 45% 40%, #d4b56c 5%, #a67c28 40%, #704d10 75%, #4a3008 100%);
+        }
+        .coin-img::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            background: #f5f0e7;
+            border: 2px solid rgba(0,0,0,0.25);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+        .coin-yang .char {
+            position: absolute;
+            font-size: 10px;
+            font-weight: bold;
+            color: #3d1f00;
+            text-shadow: 0 1px 1px rgba(255,220,150,0.8);
+            z-index: 1;
+        }
+        .coin-yang .char-top    { top: 6px; left: 50%; transform: translateX(-50%); }
+        .coin-yang .char-bottom { bottom: 6px; left: 50%; transform: translateX(-50%); }
+        .coin-yang .char-left   { left: 6px; top: 50%; transform: translateY(-50%); }
+        .coin-yang .char-right  { right: 6px; top: 50%; transform: translateY(-50%); }
     </style>
 </head>
 <body>
@@ -55,7 +136,15 @@
     <div class="sub">三枚铜钱 · 诚心掷卦 · 初爻在下</div>
 
     <div class="coin-area">
-        <div class="coin-display" id="coinDisplay">阳 阳 阳</div>
+        <div class="coin-display" id="coinDisplay">
+            <div class="coin-row">
+                <span class="coin-img coin-yang" id="coin1"></span>
+            </div>
+            <div class="coin-row">
+                <span class="coin-img coin-yang" id="coin2"></span>
+                <span class="coin-img coin-yang" id="coin3"></span>
+            </div>
+        </div>
         <button class="btn-shake" id="shakeBtn">掷 铜 钱</button>
         <div class="coin-hint">↑ 每次掷一爻，共需 <strong>6次</strong> 掷完，自动解卦</div>
     </div>
@@ -197,7 +286,6 @@
             }
         }
 
-        // 切换面板
         document.getElementById('baziToggle').addEventListener('click', () => {
             document.getElementById('baziPanel').classList.toggle('hidden');
         });
@@ -206,50 +294,64 @@
         // ---------- 八卦系统 ----------
         const GUA_64_NAMES = [];
         (function buildNames(){
-            const suffixMap = {
-                "0,1":"剥","0,2":"比","0,3":"观","0,4":"豫","0,5":"晋","0,6":"萃","0,7":"否",
-                "1,0":"谦","1,2":"蹇","1,3":"渐","1,4":"小过","1,5":"旅","1,6":"咸","1,7":"遁",
-                "2,0":"师","2,1":"蒙","2,3":"涣","2,4":"解","2,5":"未济","2,6":"困","2,7":"讼",
-                "3,0":"升","3,1":"蛊","3,2":"井","3,4":"恒","3,5":"鼎","3,6":"大过","3,7":"姤",
-                "4,0":"复","4,1":"颐","4,2":"屯","4,3":"益","4,5":"噬嗑","4,6":"随","4,7":"无妄",
-                "5,0":"明夷","5,1":"贲","5,2":"既济","5,3":"家人","5,4":"丰","5,6":"革","5,7":"同人",
-                "6,0":"临","6,1":"损","6,2":"节","6,3":"中孚","6,4":"归妹","6,5":"睽","6,7":"履",
-                "7,0":"泰","7,1":"大畜","7,2":"需","7,3":"小畜","7,4":"大壮","7,5":"大有","7,6":"夬"
-            };
+            // 根据上卦和下卦索引，返回对应卦名的后缀
+            function getGuaSuffix(shang, xia) {
+                const map = {
+                    "0,0": "坤", "0,1": "剥", "0,2": "比", "0,3": "观", "0,4": "豫", "0,5": "晋", "0,6": "萃", "0,7": "否",
+                    "1,0": "谦", "1,1": "艮", "1,2": "蹇", "1,3": "渐", "1,4": "小过", "1,5": "旅", "1,6": "咸", "1,7": "遁",
+                    "2,0": "师", "2,1": "蒙", "2,2": "坎", "2,3": "涣", "2,4": "解", "2,5": "未济", "2,6": "困", "2,7": "讼",
+                    "3,0": "升", "3,1": "蛊", "3,2": "井", "3,3": "巽", "3,4": "恒", "3,5": "鼎", "3,6": "大过", "3,7": "姤",
+                    "4,0": "复", "4,1": "颐", "4,2": "屯", "4,3": "益", "4,4": "震", "4,5": "噬嗑", "4,6": "随", "4,7": "无妄",
+                    "5,0": "明夷", "5,1": "贲", "5,2": "既济", "5,3": "家人", "5,4": "丰", "5,5": "离", "5,6": "革", "5,7": "同人",
+                    "6,0": "临", "6,1": "损", "6,2": "节", "6,3": "中孚", "6,4": "归妹", "6,5": "睽", "6,6": "兑", "6,7": "履",
+                    "7,0": "泰", "7,1": "大畜", "7,2": "需", "7,3": "小畜", "7,4": "大壮", "7,5": "大有", "7,6": "夬", "7,7": "乾"
+                };
+                return map[shang+","+xia] || "";
+            }
+
             for (let sh=0; sh<8; sh++) {
                 for (let xi=0; xi<8; xi++) {
-                    if (sh===xi) GUA_64_NAMES.push(["坤为地","艮为山","坎为水","巽为风","震为雷","离为火","兑为泽","乾为天"][sh]);
-                    else {
+                    if (sh===xi) {
+                        const pureMap = ["坤为地","艮为山","坎为水","巽为风","震为雷","离为火","兑为泽","乾为天"];
+                        GUA_64_NAMES.push(pureMap[sh]);
+                    } else {
                         const ss=["地","山","水","风","雷","火","泽","天"][sh];
                         const xs=["地","山","水","风","雷","火","泽","天"][xi];
-                        GUA_64_NAMES.push(ss + xs + (suffixMap[sh+","+xi] || ""));
+                        GUA_64_NAMES.push(ss + xs + getGuaSuffix(sh, xi));
                     }
                 }
             }
         })();
         function getGuaName(sh, xi) { return GUA_64_NAMES[sh*8+xi] || "未知卦"; }
 
+        // 铜钱逻辑（HTML 三角形 + 天霸通寶）
+        function makeCoinHTML(c1, c2, c3) {
+            const coin = (isYang) => isYang ? 
+                `<span class="coin-img coin-yang"><span class="char char-top">天</span><span class="char char-bottom">霸</span><span class="char char-left">寶</span><span class="char char-right">通</span></span>` :
+                `<span class="coin-img coin-yin"></span>`;
+            // 返回三角形排列：上方一个，下方两个
+            return `<div class="coin-row">${coin(c1)}</div><div class="coin-row">${coin(c2)} ${coin(c3)}</div>`;
+        }
+
         function throwCoins() {
             const c1 = Math.random()<0.5?0:1, c2 = Math.random()<0.5?0:1, c3 = Math.random()<0.5?0:1;
             const yang = c1+c2+c3;
             let val;
             if (yang===0) val=6; else if (yang===1) val=7; else if (yang===2) val=8; else val=9;
-            const s1 = c1?"阳":"阴", s2 = c2?"阳":"阴", s3 = c3?"阳":"阴";
-            return { yaoValue: val, coinStr: `${s1}  ${s2}  ${s3}` };
+            return { yaoValue: val, coinHTML: makeCoinHTML(c1, c2, c3) };
         }
-        
-        function yaoSymbol(v) {
-        if (v === 6) return "⚋";   
-        if (v === 9) return "⚊";   
-        if (v === 7) return "⚊";  
-        return "⚋";              
+
+        // CSS 精确画线，返回 HTML
+        function yaoSymbolHTML(v) {
+            if (v === 7 || v === 9) return '<span class="line-yang"></span>';
+            return '<span class="line-yin"><span></span><span></span></span>';
         }
 
         function yaoTypeName(v) {
-        if (v === 6) return "老阴 ×";
-        if (v === 9) return "老阳 o";
-        if (v === 7) return "少阳 ⚊";
-        return "少阴 ⚋";
+            if (v === 6) return "老阴";
+            if (v === 9) return "老阳";
+            if (v === 7) return "少阳";
+            return "少阴";
         }
 
         function analyzeYao(vals) {
@@ -289,7 +391,7 @@
                 for (let i=0;i<currentYaos.length;i++) {
                     const v=currentYaos[i];
                     const pos=["初爻","二爻","三爻","四爻","五爻","上爻"][i];
-                    h += `<div class="yao-item"><span class="yao-position">${pos}</span><span class="yao-symbol">${yaoSymbol(v)}</span><span class="yao-type">${yaoTypeName(v)}</span></div>`;
+                    h += `<div class="yao-item"><span class="yao-position">${pos}</span><span class="yao-symbol">${yaoSymbolHTML(v)}</span><span class="yao-type">${yaoTypeName(v)}</span></div>`;
                 }
                 yaoListDiv.innerHTML = h;
             }
@@ -327,10 +429,10 @@
 
         function throwOnce() {
             if (step>=6) return;
-            const {yaoValue, coinStr} = throwCoins();
+            const {yaoValue, coinHTML} = throwCoins();
             currentYaos.push(yaoValue);
             step++;
-            coinDisp.innerText = coinStr;
+            coinDisp.innerHTML = coinHTML;
             coinDisp.style.backgroundColor='#f5e2c1';
             setTimeout(()=> coinDisp.style.backgroundColor='#fef3e4', 120);
             updateUI();
@@ -338,7 +440,8 @@
 
         function resetAll() {
             currentYaos=[]; step=0;
-            coinDisp.innerText='阳 阳 阳';
+            // 初始三枚阳面铜钱三角形
+            coinDisp.innerHTML = makeCoinHTML(1,1,1);
             coinDisp.style.backgroundColor='#fef3e4';
             updateUI();
             shakeBtn.disabled=false;
